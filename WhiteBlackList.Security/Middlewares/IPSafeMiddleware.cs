@@ -18,8 +18,8 @@ public class IPSafeMiddleware
     public async Task Invoke(HttpContext context)
     {
         var reqIpAdress = context.Connection.RemoteIpAddress;
-
-        var isWhiteList = _ipList.WhiteList.Where(x => IPAddress.Parse(x).Equals(reqIpAdress)).Any();
+         
+        var isWhiteList = _ipList.WhiteList!.Where(x => IPAddress.Parse(x).Equals(reqIpAdress)).Any();
 
         if (!isWhiteList) 
         {

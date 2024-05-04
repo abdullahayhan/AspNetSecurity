@@ -1,3 +1,4 @@
+using WhiteBlackList.Security.Filters;
 using WhiteBlackList.Security.Middlewares;
 using WhiteBlackList.Security.Models;
 
@@ -7,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.Configure<IPList>(builder.Configuration.GetSection("IPList"));
+
+// her bir requestte yeni bir nesne üretir.
+builder.Services.AddScoped<CheckWhiteList>();
 
 var app = builder.Build();
 
@@ -18,14 +22,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseMiddleware<IPSafeMiddleware>();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
-app.UseMiddleware<IPSafeMiddleware>();
 
 app.MapControllerRoute(
     name: "default",
